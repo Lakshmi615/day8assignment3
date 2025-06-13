@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Sentence Repeater</title> 
+    <style>
+        body {
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            background-color: #f0f8ff; 
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff; 
+            padding: 35px; 
+            border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+            text-align: center; 
+            width: 100%; 
+            max-width: 600px; 
+            animation: fadeIn 0.8s ease-out; 
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        h1 {
+            color: #2c3e50; 
+            margin-bottom: 20px; 
+            font-size: 2.2em; 
+            font-weight: 600; 
+        }
+        label {
+            display: block; 
+            text-align: left; 
+            margin-bottom: 8px; 
+            color: #34495e;
+            font-size: 1.1em; 
+            font-weight: 500; 
+        }
+        .input-field {
+            width: calc(100% - 40px); 
+            padding: 12px 20px; 
+            margin-bottom: 20px; 
+            border: 2px solid #a7d9f7; 
+            border-radius: 10px; 
+            font-size: 1.1em; 
+            color: #37474f; 
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+            outline: none; 
+            resize: vertical; 
+            min-height: 40px; 
+        }
+        .input-field:focus {
+            border-color: #007bff; 
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.25); 
+        }
+        .repeat-button {
+            background-color: #007bff; 
+            color: white; 
+            padding: 14px 30px; 
+            border: none; 
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; 
+            outline: none; 
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2); 
+            margin-top: 10px; 
+        }
+        .repeat-button:hover {
+            background-color: #0056b3; 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3); 
+        }
+        .repeat-button:active {
+            transform: translateY(0); 
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+        }
+        .result-output {
+            margin-top: 30px; 
+            text-align: left; 
+            padding: 20px;
+            background-color: #e3f2fd; 
+            border: 1px solid #90caf9;
+            border-radius: 10px; 
+            min-height: 80px;
+            white-space: pre-wrap;
+            word-wrap: break-word; 
+            color: #1a237e;
+            font-size: 1.1em;
+            line-height: 1.6; 
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05); 
+        }
+        .result-output.error {
+            background-color: #ffebee; 
+            border-color: #ef9a9a; 
+            color: #d32f2f; 
+            font-weight: bold; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Sentence Repeater</h1> 
+
+        <label for="sentenceInput">Sentence to Repeat:</label> 
+        <textarea id="sentenceInput" class="input-field" rows="4" placeholder="Type your sentence here..."></textarea>
+
+        <label for="repeatCountInput">Number of Repeats:</label> 
+        <input type="number" id="repeatCountInput" class="input-field" min="1" value="1" placeholder="e.g., 5"> 
+
+        <button id="repeatButton" class="repeat-button">Repeat Sentence</button> 
+
+        <div id="resultOutput" class="result-output"> 
+            Your repeated sentence will appear here.
+        </div>
+    </div>
+
+    <script>
+        const sentenceInput = document.getElementById('sentenceInput'); 
+        const repeatCountInput = document.getElementById('repeatCountInput'); 
+        const repeatButton = document.getElementById('repeatButton'); 
+        const resultOutput = document.getElementById('resultOutput'); 
+        repeatButton.addEventListener('click', () => {
+            const sentence = sentenceInput.value; 
+            const repeatCount = parseInt(repeatCountInput.value);
+            resultOutput.className = 'result-output'; 
+            if (sentence.trim() === '') {
+                resultOutput.textContent = 'Please enter a sentence to repeat.';
+                resultOutput.classList.add('error'); 
+                return;
+            }
+            if (isNaN(repeatCount) || repeatCount < 1) {
+                resultOutput.textContent = 'Please enter a valid positive number for repeats (e.g., 1, 5).'; 
+                resultOutput.classList.add('error'); 
+                return; 
+            }
+            let repeatedSentence = ''; 
+            for (let i = 0; i < repeatCount; i++) {
+                repeatedSentence += sentence + '\n'; 
+            }
+            resultOutput.textContent = repeatedSentence;
+        });
+        sentenceInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && event.shiftKey) {
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                repeatButton.click(); 
+            }
+        });
+
+        repeatCountInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); 
+                repeatButton.click();
+            }
+        });
+    </script>
+</body>
+</html>
